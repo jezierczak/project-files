@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "customer_id": 1,
+    "product_id": 1,
+    "quantity": 1,
+    "discount": "0.10",
+    "shipping_method": "Standard"
+  },
+  {
+    "id": 2,
+    "customer_id": 1,
+    "product_id": 7,
+    "quantity": 3,
+    "discount": "0.05",
+    "shipping_method": "Express"
+  },
+  {
+    "id": 3,
+    "customer_id": 2,
+    "product_id": 2,
+    "quantity": 2,
+    "discount": "0.15",
+    "shipping_method": "Standard"
+  },
+  {
+    "id": 4,
+    "customer_id": 2,
+    "product_id": 6,
+    "quantity": 1,
+    "discount": "0.00",
+    "shipping_method": "Express"
+  },
+  {
+    "id": 5,
+    "customer_id": 2,
+    "product_id": 4,
+    "quantity": 5,
+    "discount": "0.10",
+    "shipping_method": "Standard"
+  },
+  {
+    "id": 6,
+    "customer_id": 3,
+    "product_id": 1,
+    "quantity": 1,
+    "discount": "0.20",
+    "shipping_method": "Express"
+  },
+  {
+    "id": 7,
+    "customer_id": 3,
+    "product_id": 5,
+    "quantity": 2,
+    "discount": "0.00",
+    "shipping_method": "Standard"
+  },
+  {
+    "id": 8,
+    "customer_id": 1,
+    "product_id": 3,
+    "quantity": 1,
+    "discount": "0.05",
+    "shipping_method": "Standard"
+  },
+  {
+    "id": 9,
+    "customer_id": 3,
+    "product_id": 8,
+    "quantity": 1,
+    "discount": "0.10",
+    "shipping_method": "Express"
+  },
+  {
+    "id": 10,
+    "customer_id": 2,
+    "product_id": 9,
+    "quantity": 1,
+    "discount": "0.05",
+    "shipping_method": "Standard"
+  },
+  {
+    "id": 11,
+    "customer_id": 1,
+    "product_id": 6,
+    "quantity": 1,
+    "discount": "0.00",
+    "shipping_method": "Express"
+  },
+  {
+    "id": 12,
+    "customer_id": 1,
+    "product_id": 9,
+    "quantity": 2,
+    "discount": "0.15",
+    "shipping_method": "Standard"
+  },
+  {
+    "id": 13,
+    "customer_id": 2,
+    "product_id": 5,
+    "quantity": 3,
+    "discount": "0.10",
+    "shipping_method": "Express"
+  },
+  {
+    "id": 14,
+    "customer_id": 3,
+    "product_id": 4,
+    "quantity": 4,
+    "discount": "0.20",
+    "shipping_method": "Standard"
+  },
+  {
+    "id": 15,
+    "customer_id": 1,
+    "product_id": 2,
+    "quantity": 1,
+    "discount": "0.05",
+    "shipping_method": "Express"
+  },
+  {
+    "id": 16,
+    "customer_id": 3,
+    "product_id": 7,
+    "quantity": 1,
+    "discount": "0.00",
+    "shipping_method": "Standard"
+  },
+  {
+    "id": 17,
+    "customer_id": 2,
+    "product_id": 3,
+    "quantity": 2,
+    "discount": "0.10",
+    "shipping_method": "Express"
+  },
+  {
+    "id": 18,
+    "customer_id": 1,
+    "product_id": 8,
+    "quantity": 1,
+    "discount": "0.05",
+    "shipping_method": "Standard"
+  },
+  {
+    "id": 19,
+    "customer_id": 3,
+    "product_id": 2,
+    "quantity": 3,
+    "discount": "0.15",
+    "shipping_method": "Express"
+  },
+  {
+    "id": 20,
+    "customer_id": 2,
+    "product_id": 1,
+    "quantity": 1,
+    "discount": "0.00",
+    "shipping_method": "Standard"
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "name": "Laptop",
+    "category": "Electronics",
+    "price": "1500.00"
+  },
+  {
+    "id": 2,
+    "name": "Smartphone",
+    "category": "Electronics",
+    "price": "800.00"
+  },
+  {
+    "id": 3,
+    "name": "Headphones",
+    "category": "Electronics",
+    "price": "120.00"
+  },
+  {
+    "id": 4,
+    "name": "T-shirt",
+    "category": "Clothing",
+    "price": "20.00"
+  },
+  {
+    "id": 5,
+    "name": "Jeans",
+    "category": "Clothing",
+    "price": "40.00"
+  },
+  {
+    "id": 6,
+    "name": "Jacket",
+    "category": "Clothing",
+    "price": "100.00"
+  },
+  {
+    "id": 7,
+    "name": "Novel Book",
+    "category": "Books",
+    "price": "15.00"
+  },
+  {
+    "id": 8,
+    "name": "Science Book",
+    "category": "Books",
+    "price": "25.00"
+  },
+  {
+    "id": 9,
+    "name": "History Book",
+    "category": "Books",
+    "price": "30.00"
+  }
+]
