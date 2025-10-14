@@ -1,4 +1,4 @@
-from src.validator import Validator
+from src.validator import AbstractValidator
 from src.model import ProductCategory, ShippingMethod
 from decimal import Decimal
 

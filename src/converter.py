@@ -16,14 +16,14 @@ from src.model import (
 class Converter[T, U](ABC):
 
     @abstractmethod
-    def from_json(self, data: T) -> U:
+    def convert(self, data: T) -> U:
         pass
 
 
 class ProductConverter(Converter[ProductDataDict, Product]):
 
     @override
-    def from_json(self, data: ProductDataDict) -> Product:
+    def convert(self, data: ProductDataDict) -> Product:
         return Product(
             id=int(data["id"]),
             name=str(data["name"]),
@@ -34,7 +34,7 @@ class ProductConverter(Converter[ProductDataDict, Product]):
 class CustomerConverter(Converter[CustomerDataDict, Customer]):
 
     @override
-    def from_json(self, data: CustomerDataDict) -> Customer:
+    def convert(self, data: CustomerDataDict) -> Customer:
         return Customer(
             id=int(data["id"]),
             first_name=str(data["first_name"]),
@@ -46,7 +46,7 @@ class CustomerConverter(Converter[CustomerDataDict, Customer]):
 class OrderConverter(Converter[OrderDataDict, Order]):
 
     @override
-    def from_json(self, data: OrderDataDict) -> Order:
+    def convert(self, data: OrderDataDict) -> Order:
         return Order(
             id=int(data["id"]),
             customer_id=int(data["customer_id"]),

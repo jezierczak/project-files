@@ -7,6 +7,7 @@ from src.file_service import (
     OrderJsonFileWriter
 )
 from src.model import ProductDataDict, CustomerDataDict, OrderDataDict
+# from py.path import local
 import os
 import json
 
@@ -29,6 +30,7 @@ def test_read_orders(orders_file: str, orders_data: list[OrderDataDict]) -> None
     assert orders == orders_data
 
 
+# def test_write_products(tmpdir: local, products_data: list[ProductDataDict]) -> None:
 def test_write_products(tmpdir, products_data: list[ProductDataDict]) -> None:
     writer = ProductJsonFileWriter()
     file_path = os.path.join(tmpdir, 'test_products.json')

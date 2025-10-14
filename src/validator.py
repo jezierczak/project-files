@@ -1,21 +1,22 @@
-from abc import abstractmethod, ABC
-from src.model import ProductDataDict, CustomerDataDict, OrderDataDict
+import logging
+import re
+from abc import ABC
+from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from enum import Enum
 from typing import Type, override
 from email_validator import validate_email, EmailNotValidError
-from dataclasses import dataclass, field
-import re
-import logging
+from src.model import ProductDataDict, CustomerDataDict, OrderDataDict
 
 logging.basicConfig(level=logging.INFO)
 
 
-class Validator[T](ABC):
+@dataclass
+class AbstractValidator[T](ABC):
+    required_keys: list[str] = field(default_factory=list)
 
-    @abstractmethod
     def validate(self, data: T) -> bool:
-        pass
+        return len(self.required_keys) == 0 or self.has_required_keys(data, self.required_keys)
 
     def has_required_keys(self, data: T, keys: list[str]) -> bool:
         missing_keys = []
@@ -75,42 +76,42 @@ class Validator[T](ABC):
     def validate_string_with_regex(value: str, pattern: str) -> bool:
         return re.fullmatch(pattern, value) is not None
 
-
 @dataclass
-class ProductDataDictValidator(Validator[ProductDataDict]):
-    required_keys: list[str] = field(default_factory=lambda: ['id', 'name', 'category', 'price'])
+class ProductDataDictValidator(AbstractValidator[ProductDataDict]):
+
+    def __post_init__(self):
+        if len(self.required_keys) == 0:
+            self.required_keys = ['id', 'name', 'category', 'price']
 
     @override
     def validate(self, data: ProductDataDict) -> bool:
-        if self.required_keys and not self.has_required_keys(data, self.required_keys):
-            return False
-        return Validator.is_positive(data['price'])
-
+        return super().validate(data) and AbstractValidator.is_positive(data['price'])
 
 @dataclass
-class CustomerDataDictValidator(Validator[CustomerDataDict]):
+class CustomerDataDictValidator(AbstractValidator[CustomerDataDict]):
     min_age: int = 18
     max_age: int = 65
-    required_keys: list[str] = field(default_factory=lambda: ['id', 'first_name', 'last_name', 'age', 'email'])
+
+    def __post_init__(self):
+        if len(self.required_keys) == 0:
+            self.required_keys = ['id', 'first_name', 'last_name', 'age', 'email']
 
     @override
     def validate(self, data: CustomerDataDict) -> bool:
-        if self.required_keys and not self.has_required_keys(data, self.required_keys):
-            return False
-        return Validator.validate_int_in_range(int(data['age']), self.min_age, self.max_age)
-
+        return super().validate(data) and AbstractValidator.validate_int_in_range(int(data['age']), self.min_age,
+                                                                                  self.max_age)
 
 @dataclass
-class OrderDataDictValidator(Validator[OrderDataDict]):
+class OrderDataDictValidator(AbstractValidator[OrderDataDict]):
     min_discount: Decimal = Decimal("0.0")
     max_discount: Decimal = Decimal("1.0")
-    required_keys: list[str] = field(default_factory=lambda: ['id', 'customer_id', 'product_id', 'quantity', 'discount', 'shipping_method'])
+
+    def __post_init__(self):
+        if len(self.required_keys) == 0:
+            self.required_keys = ['id', 'customer_id', 'product_id', 'quantity', 'discount', 'shipping_method']
 
     @override
     def validate(self, data: OrderDataDict) -> bool:
-        if self.required_keys and not self.has_required_keys(data, self.required_keys):
-            return False
-        return Validator.validate_decimal_in_range(str(data['discount']), self.min_discount, self.max_discount)
-
-
-# TODO Powtarzanie kodu
+        return super().validate(data) and AbstractValidator.validate_decimal_in_range(str(data['discount']),
+                                                                                      self.min_discount,
+                                                                                      self.max_discount)

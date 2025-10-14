@@ -25,7 +25,7 @@ from decimal import Decimal
 ])
 def test_product_converter_from_json(data: ProductDataDict, product: Product) -> None:
     converter = ProductConverter()
-    result = converter.from_json(data)
+    result = converter.convert(data)
     assert result.id == product.id
     assert result.name == product.name
     assert result.category == product.category
@@ -44,7 +44,7 @@ def test_product_converter_from_json(data: ProductDataDict, product: Product) ->
 ])
 def test_customer_converter_from_json(data: CustomerDataDict, customer: Customer) -> None:
     converter = CustomerConverter()
-    result = converter.from_json(data)
+    result = converter.convert(data)
     assert result.id == customer.id
     assert result.first_name == customer.first_name
     assert result.last_name == customer.last_name
@@ -64,7 +64,7 @@ def test_customer_converter_from_json(data: CustomerDataDict, customer: Customer
 ])
 def test_order_converter_from_json(data: OrderDataDict, order: Order) -> None:
     converter = OrderConverter()
-    result = converter.from_json(data)
+    result = converter.convert(data)
     assert result.id == order.id
     assert result.customer_id == order.customer_id
     assert result.product_id == order.product_id
