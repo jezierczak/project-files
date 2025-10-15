@@ -21,52 +21,56 @@ def test_get_data_empty_cache_logs_warning(
 
 
 def test_refresh_product_data_calls_file_reader_and_process_data(
-        product_data_repository: ProductDataRepository, file_reader_mock: MagicMock
+        product_data_repository: ProductDataRepository,
+        product_1: Product,
+        file_reader_mock: MagicMock
 ) -> None:
-    file_reader_mock.read.return_value = [{"id": 1, "name": "Laptop", "category": "Electronics", "price": "999.99"}]
+    file_reader_mock.read.return_value = [{"id": 101, "name": "Laptop", "category": "Electronics", "price": "1500.00"}]
     product_data_repository.validator.validate.return_value = True  # type: ignore[attr-defined]
-    product_data_repository.converter.convert.return_value = Product(id=1, name="Laptop", category=ProductCategory.ELECTRONICS, price=Decimal("999.99"))  # type: ignore[attr-defined]
+    product_data_repository.converter.convert.return_value = product_1  # type: ignore[attr-defined]
 
     data = product_data_repository.refresh_data()
 
     file_reader_mock.read.assert_called_with('products.json')
     assert file_reader_mock.read.call_count == 2
     assert len(data) == 1
-    assert data[0].id == 1
-    assert data[0].name == "Laptop"
-    assert data[0].category == ProductCategory.ELECTRONICS
-    assert data[0].price == Decimal("999.99")
+    assert data[0].id == product_1.id
+    assert data[0].name == product_1.name
+    assert data[0].category == product_1.category
+    assert data[0].price == product_1.price
 
 
 def test_refresh_customer_data_calls_file_reader_and_process_data(
-        customer_data_repository: CustomerDataRepository, file_reader_mock: MagicMock
+        customer_data_repository: CustomerDataRepository,
+        customer_1: Customer,
+        customer_1_data: CustomerDataDict,
+        file_reader_mock: MagicMock
 ) -> None:
-    file_reader_mock.read.return_value = [
-        {"id": 1, "first_name": "A", "last_name": "AA", "age": 10, "email": "a@gmail.com"}]
+    file_reader_mock.read.return_value = [customer_1_data]
     customer_data_repository.validator.validate.return_value = True  # type: ignore[attr-defined]
-    customer_data_repository.converter.convert.return_value = Customer(id=1, first_name="A", last_name="AA", age=10, email="a@gmail.com")  # type: ignore[attr-defined]
+    customer_data_repository.converter.convert.return_value = customer_1 # type: ignore[attr-defined]
 
     data = customer_data_repository.refresh_data()
 
     file_reader_mock.read.assert_called_with('customers.json')
     assert file_reader_mock.read.call_count == 2
     assert len(data) == 1
-    assert data[0].id == 1
-    assert data[0].first_name == "A"
-    assert data[0].last_name == "AA"
-    assert data[0].age == 10
-    assert data[0].email == "a@gmail.com"
+    assert data[0].id == customer_1.id
+    assert data[0].first_name == customer_1.first_name
+    assert data[0].last_name == customer_1.last_name
+    assert data[0].age == customer_1.age
+    assert data[0].email == customer_1.email
 
 def test_refresh_customer_data_calls_file_reader_and_process_data_2(
+        customer_1: Customer,
+        customer_1_data: CustomerDataDict,
         validator_mock: MagicMock,
         converter_mock: MagicMock,
         file_reader_mock: MagicMock
 ) -> None:
-    file_reader_mock.read.return_value = [
-        {"id": 1, "first_name": "A", "last_name": "AA", "age": 10, "email": "a@gmail.com"}]
+    file_reader_mock.read.return_value = [customer_1_data]
     validator_mock.validate.return_value = True
-    converter_mock.convert.return_value \
-        = Customer(id=1, first_name="A", last_name="AA", age=10, email="a@gmail.com")
+    converter_mock.convert.return_value = customer_1
 
     customer_data_repository = CustomerDataRepository(
         file_reader=file_reader_mock,
@@ -79,11 +83,11 @@ def test_refresh_customer_data_calls_file_reader_and_process_data_2(
     file_reader_mock.read.assert_called_with('customers.json')
     assert file_reader_mock.read.call_count == 2
     assert len(data) == 1
-    assert data[0].id == 1
-    assert data[0].first_name == "A"
-    assert data[0].last_name == "AA"
-    assert data[0].age == 10
-    assert data[0].email == "a@gmail.com"
+    assert data[0].id == customer_1.id
+    assert data[0].first_name == customer_1.first_name
+    assert data[0].last_name == customer_1.last_name
+    assert data[0].age == customer_1.age
+    assert data[0].email == customer_1.email
 
 
 def test_invalid_entry_logs_error(
@@ -113,7 +117,7 @@ def test_no_filename_raises_value_error(
         converter_mock: MagicMock
 ) -> None:
     with pytest.raises(ValueError, match='No filename set'):
-        product_data_repository = ProductDataRepository(
+        _ = ProductDataRepository(
             file_reader=file_reader_mock,
             validator=validator_mock,
             converter=converter_mock,

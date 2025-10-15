@@ -1,11 +1,9 @@
 from decimal import Decimal
 from enum import Enum
 from typing import Type
-
-import pytest
-
 from src.model import ProductCategory, ProductDataDict, CustomerDataDict, OrderDataDict
 from src.validator import AbstractValidator, ProductDataDictValidator, CustomerDataDictValidator, OrderDataDictValidator
+import pytest
 
 
 @pytest.mark.parametrize("value, expected", [

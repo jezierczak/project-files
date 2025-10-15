@@ -24,6 +24,9 @@ class Product:
     category: ProductCategory
     price: Decimal
 
+    def total_price(self, quantity: int) -> Decimal:
+        return self.price * quantity
+
     def to_dict(self) -> ProductDataDict:
         return {
             "id": self.id,

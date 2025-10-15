@@ -1,4 +1,5 @@
 import pytest
+from pytest import FixtureRequest
 from src.converter import ProductConverter, CustomerConverter, OrderConverter
 from src.model import (
     Product,
@@ -13,38 +14,36 @@ from src.model import (
 from decimal import Decimal
 
 
-@pytest.mark.parametrize("data, product", [
-    (
-            {"id": 1, "name": "Laptop", "category": "Electronics", "price": "999.99"},
-            Product(id=1, name="Laptop", category=ProductCategory.ELECTRONICS, price=Decimal("999.99"))
-    ),
-    (
-            {"id": 2, "name": "Book", "category": "Books", "price": "19.99"},
-            Product(id=2, name="Book", category=ProductCategory.BOOKS, price=Decimal("19.99"))
-    ),
+@pytest.mark.parametrize("product_data_fixture_name, product_fixture_name", [
+    ("product_1_data", "product_1"),
+    ("product_2_data", "product_2")
 ])
-def test_product_converter_from_json(data: ProductDataDict, product: Product) -> None:
+def test_product_converter_from_json(
+        product_data_fixture_name: str,
+        product_fixture_name: str,
+        request: FixtureRequest) -> None:
+    product = request.getfixturevalue(product_fixture_name)
+    product_data = request.getfixturevalue(product_data_fixture_name)
     converter = ProductConverter()
-    result = converter.convert(data)
+    result = converter.convert(product_data)
     assert result.id == product.id
     assert result.name == product.name
     assert result.category == product.category
     assert result.price == product.price
 
 
-@pytest.mark.parametrize("data, customer", [
-    (
-            {"id": 1, "first_name": "A", "last_name": "AA", "age": 10, "email": "a@gmail.com"},
-            Customer(id=1, first_name= "A", last_name= "AA", age= 10, email= "a@gmail.com")
-    ),
-    (
-            {"id": 2, "first_name": "B", "last_name": "BB", "age": 20, "email": "b@gmail.com"},
-            Customer(id=2, first_name= "B", last_name= "BB", age= 20, email= "b@gmail.com")
-    ),
+@pytest.mark.parametrize("customer_data_fixture_name, customer_fixture_name", [
+    ("customer_1_data", "customer_1"),
+    ("customer_2_data", "customer_2")
 ])
-def test_customer_converter_from_json(data: CustomerDataDict, customer: Customer) -> None:
+def test_customer_converter_from_json(
+        customer_data_fixture_name: str,
+        customer_fixture_name: str,
+        request: FixtureRequest) -> None:
+    customer = request.getfixturevalue(customer_fixture_name)
+    customer_data = request.getfixturevalue(customer_data_fixture_name)
     converter = CustomerConverter()
-    result = converter.convert(data)
+    result = converter.convert(customer_data)
     assert result.id == customer.id
     assert result.first_name == customer.first_name
     assert result.last_name == customer.last_name
@@ -52,19 +51,19 @@ def test_customer_converter_from_json(data: CustomerDataDict, customer: Customer
     assert result.email == customer.email
 
 
-@pytest.mark.parametrize("data, order", [
-    (
-            {"id": 1, "customer_id": 1, "product_id": 1, "discount": "0.1", "quantity": 1, "shipping_method": "Standard"},
-            Order(id=1, customer_id= 1, product_id= 1, discount= Decimal("0.1"), quantity= 1, shipping_method= ShippingMethod.STANDARD)
-    ),
-    (
-            {"id": 2, "customer_id": 2, "product_id": 2, "discount": "0.2", "quantity": 2, "shipping_method": "Express"},
-            Order(id=2, customer_id= 2, product_id= 2, discount= Decimal("0.2"), quantity= 2, shipping_method= ShippingMethod.EXPRESS)
-    ),
+@pytest.mark.parametrize("order_data_fixture_name, order_fixture_name", [
+    ("order_1_data", "order_1"),
+    ("order_2_data", "order_2"),
 ])
-def test_order_converter_from_json(data: OrderDataDict, order: Order) -> None:
+def test_order_converter_from_json(
+        order_data_fixture_name: str,
+        order_fixture_name: str,
+        request: FixtureRequest) -> None:
+
+    order = request.getfixturevalue(order_fixture_name)
+    order_data = request.getfixturevalue(order_data_fixture_name)
     converter = OrderConverter()
-    result = converter.convert(data)
+    result = converter.convert(order_data)
     assert result.id == order.id
     assert result.customer_id == order.customer_id
     assert result.product_id == order.product_id

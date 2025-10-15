@@ -1,13 +1,6 @@
-import pytest
-from unittest.mock import MagicMock, create_autospec
-from typing import cast
+from unittest.mock import MagicMock
 from src.repository import ProductDataRepository, CustomerDataRepository, OrderDataRepository
-from src.model import ProductDataDict, CustomerDataDict, OrderDataDict, Product, Customer, Order
-from src.file_service import AbstractFileReader
-from src.converter import Converter
-import logging
-from src.validator import AbstractValidator
-
+import pytest
 
 @pytest.fixture
 def file_reader_mock() -> MagicMock:
