@@ -1,9 +1,7 @@
-from dataclasses import dataclass, field
 from collections import defaultdict
-from abc import ABC
-from src.file_service import AbstractFileReader
-from src.validator import AbstractValidator
+from dataclasses import dataclass, field
 from src.converter import Converter
+from src.file_service import FileReader
 from src.model import (
     ProductDataDict,
     CustomerDataDict,
@@ -12,16 +10,16 @@ from src.model import (
     Customer,
     Order
 )
+from src.validator import Validator
 import logging
-
 logging.basicConfig(level=logging.INFO)
 
 CustomersWithPurchasedProducts = dict[Customer, dict[Product, int]]
 
 @dataclass
-class AbstractDataRepository[T, U](ABC):
-    file_reader: AbstractFileReader[T]
-    validator: AbstractValidator[T]
+class DataRepository[T, U]:
+    file_reader: FileReader[T]
+    validator: Validator[T]
     converter: Converter[T, U]
     filename: str | None = None
     _data: list[U] = field(default_factory=list)
@@ -59,23 +57,23 @@ class AbstractDataRepository[T, U](ABC):
         return valid_data
 
 
-class ProductDataRepository(AbstractDataRepository[ProductDataDict, Product]):
+class ProductDataRepository(DataRepository[ProductDataDict, Product]):
     pass
 
 
-class CustomerDataRepository(AbstractDataRepository[CustomerDataDict, Customer]):
+class CustomerDataRepository(DataRepository[CustomerDataDict, Customer]):
     pass
 
 
-class OrderDataRepository(AbstractDataRepository[OrderDataDict, Order]):
+class OrderDataRepository(DataRepository[OrderDataDict, Order]):
     pass
 
 
 @dataclass
 class PurchaseSummaryRepository[C, P, O]:
-    customer_repo: AbstractDataRepository[C, Customer]
-    product_repo: AbstractDataRepository[P, Product]
-    order_repo: AbstractDataRepository[O, Order]
+    customer_repo: DataRepository[C, Customer]
+    product_repo: DataRepository[P, Product]
+    order_repo: DataRepository[O, Order]
     _purchase_summary: CustomersWithPurchasedProducts = field(default_factory=dict, init=False)
 
     def purchase_summary(self, force_refresh: bool = False) -> CustomersWithPurchasedProducts:

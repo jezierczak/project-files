@@ -23,43 +23,40 @@ def test_get_data_empty_cache_logs_warning(
 def test_refresh_product_data_calls_file_reader_and_process_data(
         product_data_repository: ProductDataRepository,
         product_1: Product,
-        file_reader_mock: MagicMock
+        file_reader_mock: MagicMock,
+        validator_mock: MagicMock,
+        converter_mock: MagicMock
 ) -> None:
     file_reader_mock.read.return_value = [{"id": 101, "name": "Laptop", "category": "Electronics", "price": "1500.00"}]
-    product_data_repository.validator.validate.return_value = True  # type: ignore[attr-defined]
-    product_data_repository.converter.convert.return_value = product_1  # type: ignore[attr-defined]
+    validator_mock.validate.return_value = True
+    converter_mock.convert.return_value = product_1
 
     data = product_data_repository.refresh_data()
 
     file_reader_mock.read.assert_called_with('products.json')
     assert file_reader_mock.read.call_count == 2
     assert len(data) == 1
-    assert data[0].id == product_1.id
-    assert data[0].name == product_1.name
-    assert data[0].category == product_1.category
-    assert data[0].price == product_1.price
+    assert data[0] == product_1
 
 
 def test_refresh_customer_data_calls_file_reader_and_process_data(
         customer_data_repository: CustomerDataRepository,
         customer_1: Customer,
         customer_1_data: CustomerDataDict,
-        file_reader_mock: MagicMock
+        file_reader_mock: MagicMock,
+        validator_mock: MagicMock,
+        converter_mock: MagicMock
 ) -> None:
     file_reader_mock.read.return_value = [customer_1_data]
-    customer_data_repository.validator.validate.return_value = True  # type: ignore[attr-defined]
-    customer_data_repository.converter.convert.return_value = customer_1 # type: ignore[attr-defined]
+    validator_mock.validate.return_value = True
+    converter_mock.convert.return_value = customer_1
 
     data = customer_data_repository.refresh_data()
 
     file_reader_mock.read.assert_called_with('customers.json')
     assert file_reader_mock.read.call_count == 2
     assert len(data) == 1
-    assert data[0].id == customer_1.id
-    assert data[0].first_name == customer_1.first_name
-    assert data[0].last_name == customer_1.last_name
-    assert data[0].age == customer_1.age
-    assert data[0].email == customer_1.email
+    assert data[0] == customer_1
 
 def test_refresh_customer_data_calls_file_reader_and_process_data_2(
         customer_1: Customer,

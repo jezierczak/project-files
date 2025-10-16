@@ -1,39 +1,36 @@
-from abc import ABC, abstractmethod
-from typing import override
 from src.model import ProductDataDict, CustomerDataDict, OrderDataDict
 import json
 
-
-class AbstractFileReader[T](ABC):
+class FileReader[T]:
     def read(self, filename: str) -> list[T]:
         with open(filename, 'r', encoding='utf8') as file:
             return json.load(file)
 
 
-class ProductJsonFileReader(AbstractFileReader[ProductDataDict]):
+class ProductJsonFileReader(FileReader[ProductDataDict]):
     pass
 
 
-class CustomerJsonFileReader(AbstractFileReader[CustomerDataDict]):
+class CustomerJsonFileReader(FileReader[CustomerDataDict]):
     pass
 
 
-class OrderJsonFileReader(AbstractFileReader[OrderDataDict]):
+class OrderJsonFileReader(FileReader[OrderDataDict]):
     pass
 
 
-class AbstractFileWriter[T](ABC):
+class FileWriter[T]:
     def write(self, filename: str, data: list[T]) -> None:
         with open(filename, 'w', encoding='utf8') as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
 
-class ProductJsonFileWriter(AbstractFileWriter[ProductDataDict]):
+class ProductJsonFileWriter(FileWriter[ProductDataDict]):
     pass
 
 
-class CustomerJsonFileWriter(AbstractFileWriter[CustomerDataDict]):
+class CustomerJsonFileWriter(FileWriter[CustomerDataDict]):
     pass
 
 
-class OrderJsonFileWriter(AbstractFileWriter[OrderDataDict]):
+class OrderJsonFileWriter(FileWriter[OrderDataDict]):
     pass

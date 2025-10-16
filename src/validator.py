@@ -1,18 +1,16 @@
-import logging
-import re
-from abc import ABC
 from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from enum import Enum
 from typing import Type, override
 from email_validator import validate_email, EmailNotValidError
 from src.model import ProductDataDict, CustomerDataDict, OrderDataDict
-
+import logging
+import re
 logging.basicConfig(level=logging.INFO)
 
 
 @dataclass
-class AbstractValidator[T](ABC):
+class Validator[T]:
     required_keys: list[str] = field(default_factory=list)
 
     def validate(self, data: T) -> bool:
@@ -76,8 +74,9 @@ class AbstractValidator[T](ABC):
     def validate_string_with_regex(value: str, pattern: str) -> bool:
         return re.fullmatch(pattern, value) is not None
 
+
 @dataclass
-class ProductDataDictValidator(AbstractValidator[ProductDataDict]):
+class ProductDataDictValidator(Validator[ProductDataDict]):
 
     def __post_init__(self):
         if len(self.required_keys) == 0:
@@ -85,10 +84,11 @@ class ProductDataDictValidator(AbstractValidator[ProductDataDict]):
 
     @override
     def validate(self, data: ProductDataDict) -> bool:
-        return super().validate(data) and AbstractValidator.is_positive(data['price'])
+        return super().validate(data) and self.is_positive(data['price'])
+
 
 @dataclass
-class CustomerDataDictValidator(AbstractValidator[CustomerDataDict]):
+class CustomerDataDictValidator(Validator[CustomerDataDict]):
     min_age: int = 18
     max_age: int = 65
 
@@ -98,11 +98,11 @@ class CustomerDataDictValidator(AbstractValidator[CustomerDataDict]):
 
     @override
     def validate(self, data: CustomerDataDict) -> bool:
-        return super().validate(data) and AbstractValidator.validate_int_in_range(int(data['age']), self.min_age,
-                                                                                  self.max_age)
+        return super().validate(data) and self.validate_int_in_range(data['age'], self.min_age, self.max_age)
+
 
 @dataclass
-class OrderDataDictValidator(AbstractValidator[OrderDataDict]):
+class OrderDataDictValidator(Validator[OrderDataDict]):
     min_discount: Decimal = Decimal("0.0")
     max_discount: Decimal = Decimal("1.0")
 
@@ -112,6 +112,8 @@ class OrderDataDictValidator(AbstractValidator[OrderDataDict]):
 
     @override
     def validate(self, data: OrderDataDict) -> bool:
-        return super().validate(data) and AbstractValidator.validate_decimal_in_range(str(data['discount']),
-                                                                                      self.min_discount,
-                                                                                      self.max_discount)
+        return super().validate(data) and self.validate_decimal_in_range(
+            data['discount'],
+            self.min_discount,
+            self.max_discount
+        )
